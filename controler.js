@@ -141,6 +141,21 @@ $('#repositoryUrl').keydown(function(e){
     }
 });
 
+
+	$('#pullIssueBtn').on('click', function (e) {
+
+	var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
+	getAllOpenIssues(publicRepositoryUrl);
+	if(document.getElementById("repositoryUrl").value=='' || document.getElementById("repositoryUrl").value==null){
+			$('#networkErrorModal').modal('show');
+	}
+		else{
+			bindIssueTable(issuesData);
+		}
+});
+
+
+
 $('#last24Hrs').on('click', function (e) {
 
 	bindIssueTable(last24HrData);
