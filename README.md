@@ -10,15 +10,18 @@ The repository of the applicatoin is stored in [Github](https://github.com/rohit
 
 Application Overview
 -----------------------------------------
-This application gives a solution to see all the open issues of any public git repository. Eg. by providing ropsitory URL 
-the user can see the list of open issues of last 24 hrs, 7 days and before 7 days. 
+This application gives a solution to see all the open issues of any public git repositories. Eg. by providing ropsitory URL 
+the user can see the list of open issues of last 24 hrs, 7 days and before 7 days. <br/>
 
+Example Url.<br/>
+1. octocat/Hello-World<br.>
 
-Solution
+Technology Used
 -------------------------
-Front End: Bootstrap css is used for UI.
-Source: Application uses simple Ajax call to consume Git issues apis to retrieve open issues. 
+[Bootstrap](http://getbootstrap.com/)<br/>
+[JavaScript](https://www.javascript.com/)<br/>
+[JQuery](https://jquery.com/)<br/>
 
 Improvements
 --------------------------
-UI can be improved more to show others informations of the issues. 
+UI can be more intutive and informative. To give more details of issues.
