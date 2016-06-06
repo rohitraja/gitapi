@@ -140,11 +140,11 @@ $(function(){
 	$('#pullIssueBtn').on('click', function (e) {
 
 		var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
-		getAllOpenIssues(publicRepositoryUrl);
 		if(document.getElementById("repositoryUrl").value=='' || document.getElementById("repositoryUrl").value==null){
 			$('#wrongUrlModal').modal('show');
 		}
 		else{
+			getAllOpenIssues(publicRepositoryUrl);
 			bindIssueTable(issuesData);
 		}
 	});
