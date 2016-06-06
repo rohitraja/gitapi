@@ -15,7 +15,7 @@ function ajax(){
          format: 'json'
       },
       error: function() {
-         $('#info').html('<p>An error has occurred</p>');
+		$('#networkErrorModal').modal('show');
       },
       dataType: 'jsonp',
       success: function(data, textStatus, jqXHR) {
@@ -26,6 +26,10 @@ function ajax(){
    });
 };
 
+/*
+* Dynamic ajax method for both GET and POST, return data and show 
+* error modol in the case of any network error. 
+*/
 
 function ajax(url,reqType){
 	var returnData;
@@ -51,8 +55,10 @@ function ajax(url,reqType){
 	return returnData;
 }
 
+/*
+*Bind table with the data.
+*/
 function bindIssueTable(data) {
-	//.getElementsByTagName('tbody')
     var table = document.getElementById("issueTableBody");
 	/* remove all data from the table before inserting*/
 	$("#issueTableBody").find("tr").remove();
@@ -99,75 +105,65 @@ function getAllOpenIssues(url){
 			olderThen7Data.push(issuesData[i]);
 		}
 	}
-	document.getElementById("allIssueCount").innerHTML=issuesData.length;
-	document.getElementById("last24HrsCount").innerHTML=last24HrData.length;
-	document.getElementById("last7daysCount").innerHTML= last7daysData.length;
-	document.getElementById("before7daysCount").innerHTML=olderThen7Data.length;
+	document.getElementById("allIssueCount").innerHTML=issuesData.length; //add count to the button
+	document.getElementById("last24HrsCount").innerHTML=last24HrData.length;  //add count to the button
+	document.getElementById("last7daysCount").innerHTML= last7daysData.length;  //add count to the button
+	document.getElementById("before7daysCount").innerHTML=olderThen7Data.length;  //add count to the button
 	bindIssueTable(issuesData);
 }
-
-function getlast24HrOpenIssues(url){
-	var currentDate = new Date();
-	var last24HrDate = new Date();
-	/*Subtract 24 Hrs from current date*/
-	last24HrDate.setHours(currentDate.getHours() - 24);
-	var issueUrl = url+"/issues?state=open&since="+last24HrDate.toISOString();
-	
-	//state=closed&since=2016-02-03T03:27:13.537Z
-	var data = ajax(issueUrl,"GET");
-	bindIssueTable(data);
-}
-
 
 $(function(){
-	
+	/*Adding click event to "All Issues" button */
 	$('#allIssues').on('click', function (e) {
+		var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
+		getAllOpenIssues(publicRepositoryUrl);
+		bindIssueTable(issuesData);
+	});
 
-	var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
-	getAllOpenIssues(publicRepositoryUrl);
-	bindIssueTable(issuesData);
-});
+	
+	/*Adding button press event to "All Issues" button */
+	$('#repositoryUrl').keydown(function(e){
+		if (e.keyCode == 13) {
+			var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
+			getAllOpenIssues(publicRepositoryUrl);
+			if(document.getElementById("repositoryUrl").value=='' || document.getElementById("repositoryUrl").value==null){
+				$('#wrongUrlModal').modal('show');
+			}
+			else{
+				bindIssueTable(issuesData);
+			}
+		}
+	});
 
-$('#repositoryUrl').keydown(function(e){
-    if (e.keyCode == 13) {
+
+	/*Adding click event to "All Issues" button */
+	$('#pullIssueBtn').on('click', function (e) {
+
 		var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
 		getAllOpenIssues(publicRepositoryUrl);
 		if(document.getElementById("repositoryUrl").value=='' || document.getElementById("repositoryUrl").value==null){
-			$('#networkErrorModal').modal('show');
+			$('#wrongUrlModal').modal('show');
 		}
 		else{
 			bindIssueTable(issuesData);
 		}
-    }
-});
+	});
 
+	/*Adding click even to "last 24Hrs" button */
+	$('#last24Hrs').on('click', function (e) {
+		bindIssueTable(last24HrData);
+	});
+	
+	/*Adding click even to "Last 7 days" button */
+	$('#last7days').on('click', function (e) {
+		bindIssueTable(last7daysData);
+	});
+	
+	/*Adding click even to "Before 7 days" button */
+	$('#before7').on('click', function (e) {
 
-	$('#pullIssueBtn').on('click', function (e) {
-
-	var publicRepositoryUrl = "https://api.github.com/repos/"+document.getElementById("repositoryUrl").value;
-	getAllOpenIssues(publicRepositoryUrl);
-	if(document.getElementById("repositoryUrl").value=='' || document.getElementById("repositoryUrl").value==null){
-			$('#networkErrorModal').modal('show');
-	}
-		else{
-			bindIssueTable(issuesData);
-		}
-});
-
-
-
-$('#last24Hrs').on('click', function (e) {
-
-	bindIssueTable(last24HrData);
-
-});
-$('#last7days').on('click', function (e) {
-	bindIssueTable(last7daysData);
-});
-$('#before7').on('click', function (e) {
-
-	bindIssueTable(olderThen7Data);
-});
+		bindIssueTable(olderThen7Data);
+	});
 
 
 });
