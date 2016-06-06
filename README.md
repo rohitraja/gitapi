@@ -24,4 +24,4 @@ Technology Used
 
 Improvements
 --------------------------
-UI can be more intutive and informative. To give more details of issues.
+UI can be more intutive and informative to give more details of issues.
